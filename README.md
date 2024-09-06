@@ -1,7 +1,3 @@
-Here is an updated README based on your code:
-
----
-
 # Atlas Telegram Bot
 
 This is a simple Telegram bot to play the classic geography-based game, **Atlas**, where players take turns naming places. Each new place must start with the last letter of the previous one. This bot facilitates multiplayer gameplay directly within Telegram, managing turns and keeping track of the game state.
