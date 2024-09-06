@@ -4,6 +4,8 @@ from dotenv import load_dotenv
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
 
+from check_valid_place_name import is_valid_location
+
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -71,6 +73,11 @@ async def play(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
     if place[0].lower() != last_place[-1].lower():
         await update.message.reply_text(f'Invalid move. Place must start with "{last_place[-1].upper()}".')
+        return
+
+    valid_place_flag = is_valid_location(place.lower())
+    if not valid_place_flag:
+        await update.message.reply_text('This place is not a valid country, state, or city. Try another one.')
         return
 
     if place in used_places:
