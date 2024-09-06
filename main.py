@@ -102,7 +102,8 @@ async def forfeit(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 
 async def end_game(update: Update, context: ContextTypes.DEFAULT_TYPE, chat_id: int, winner) -> None:
-    await context.bot.send_message(chat_id, f"Game over! {winner.first_name} wins!")
+    await context.bot.send_message(chat_id, f"Game over! {winner.first_name} wins! 🎉")
+    await context.bot.send_message(chat_id, f"🥳")
     del games[chat_id]
 
 
