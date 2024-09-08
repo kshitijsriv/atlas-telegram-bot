@@ -10,6 +10,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 games = {}
+VALID_PLACE_CHECK_FLAG = os.getenv("VALID_PLACE_CHECK_FLAG", 'false') == 'true'
 load_dotenv('.env')
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -76,7 +77,7 @@ async def play(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         return
 
     valid_place_flag = is_valid_location(place.lower())
-    if not valid_place_flag:
+    if VALID_PLACE_CHECK_FLAG and not valid_place_flag:
         await update.message.reply_text('This place is not a valid country, state, or city. Try another one.')
         return
 
