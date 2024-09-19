@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 games = {}
 VALID_PLACE_CHECK_FLAG = os.getenv("VALID_PLACE_CHECK_FLAG", 'false') == 'true'
-VALID_PLACES_NAMES_FILEPATH = os.getenv("VALIC_PLACES_NAMES_FILEPATH", 'data/valid_places.json')
+VALID_PLACES_NAMES_FILEPATH = os.getenv("VALID_PLACES_NAMES_FILEPATH", 'data/valid_places.json')
 load_dotenv('.env')
 valid_places = load_valid_places(VALID_PLACES_NAMES_FILEPATH)
 
