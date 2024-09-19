@@ -107,7 +107,7 @@ async def play(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         await update.message.reply_text(f'Invalid move. Place must start with "{last_place[-1].upper()}".')
         return
 
-    valid_place_flag = is_valid_location(place.lower())
+    valid_place_flag = is_valid_location(place.lower(), valid_places)
     if VALID_PLACE_CHECK_FLAG and not valid_place_flag:
         await update.message.reply_text('This place is not a valid country, state, or city. Try another one.')
         return

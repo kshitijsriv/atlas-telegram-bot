@@ -69,4 +69,4 @@ if __name__ == '__main__':
     print(is_valid_location("Lucknow"))  # Country
     print(is_valid_location("California"))  # State
     print(is_valid_location("dehradun"))  # City
-    print(is_valid_location("haryana", valid_places))  # Not valid
+    print(is_valid_location("manipur"))  # Not valid
