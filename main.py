@@ -1,17 +1,48 @@
+import json
 import logging
 import os
 from dotenv import load_dotenv
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
 
-from check_valid_place_name import is_valid_location
+from check_valid_place_name import is_valid_location, load_valid_places
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 games = {}
 VALID_PLACE_CHECK_FLAG = os.getenv("VALID_PLACE_CHECK_FLAG", 'false') == 'true'
+VALID_PLACES_NAMES_FILEPATH = os.getenv("VALIC_PLACES_NAMES_FILEPATH", 'data/valid_places.json')
 load_dotenv('.env')
+valid_places = load_valid_places(VALID_PLACES_NAMES_FILEPATH)
+
+
+# Add a new place to the valid places file
+async def add_place(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    if len(context.args) > 0:
+        place_name = ' '.join(context.args).strip().lower()
+
+        # Load existing places from the JSON file
+        with open(VALID_PLACES_NAMES_FILEPATH, 'r') as file:
+            places = json.load(file)
+
+        # Check if the place already exists
+        if place_name in places:
+            await update.message.reply_text(f"Place '{place_name}' is already in the list.")
+        else:
+            # Add the new place and save the updated list
+            places.append(place_name)
+            with open(VALID_PLACES_NAMES_FILEPATH, 'w') as file:
+                json.dump(places, file)
+
+            # Reload the valid places
+            global valid_places
+            valid_places = load_valid_places(VALID_PLACES_NAMES_FILEPATH)
+
+            await update.message.reply_text(f"Place '{place_name}' added successfully!")
+    else:
+        await update.message.reply_text("Please provide a place name.")
+
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     await update.message.reply_text('Welcome to Atlas! Type /newgame to start a new game.')
@@ -123,6 +154,7 @@ def main() -> None:
     application.add_handler(CommandHandler("newgame", new_game))
     application.add_handler(CommandHandler("join", join_game))
     application.add_handler(CommandHandler("forfeit", forfeit))
+    application.add_handler(CommandHandler("addplace", add_place))
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, play))
 
     application.run_polling()
